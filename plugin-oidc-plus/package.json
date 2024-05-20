@@ -2,7 +2,7 @@
   "name": "@typekcz-nocobase-plugins/plugin-oidc-plus",
   "displayName": "Auth: OIDC Plus",
   "description": "OIDC (OpenID Connect) authentication with extra features.",
-  "version": "1.0.0-3",
+  "version": "1.0.0-4",
   "license": "AGPL-3.0",
   "main": "dist/server/index.js",
   "devDependencies": {

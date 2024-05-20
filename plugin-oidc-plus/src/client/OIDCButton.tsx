@@ -41,7 +41,7 @@ export const OIDCButton = ({ authenticator }: { authenticator: Authenticator }) 
     if (logoutUrl) {
       const logoutUrlObj = new URL(logoutUrl);
       logoutUrlObj.searchParams.set('post_logout_redirect_uri', window.location.href);
-      Cookies.remove(logoutCookieName, { domain: window.location.hostname });
+      Cookies.remove(logoutCookieName, { domain: window.location.host });
       window.location.href = logoutUrlObj.href;
     }
     const name = params.get('authenticator');
