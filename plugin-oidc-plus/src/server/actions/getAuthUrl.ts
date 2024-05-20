@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 import { cookieName } from '../../constants';
 
 export const getAuthUrl = async (ctx: Context, next: Next) => {
-  const { redirect = '' } = ctx.action.params.values || {};
+  const redirect = ctx.action.params.values?.redirect || '';
   const app = ctx.app.name;
   const auth = ctx.auth as OIDCAuth;
   const client = await auth.createOIDCClient();
