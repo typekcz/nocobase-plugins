@@ -39,7 +39,7 @@ export const AnonymousButton = ({ authenticator }: { authenticator: Authenticato
       `}
     >
       <Button shape="round" block icon={<LoginOutlined />} onClick={login}>
-        {t('Anonymous login')}
+        {t(authenticator.title)}
       </Button>
     </Space>
   );
