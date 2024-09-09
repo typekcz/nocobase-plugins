@@ -2,16 +2,20 @@
   "name": "@typekcz-nocobase-plugins/plugin-auth-anonymous",
   "displayName": "Auth: Anonymous login",
   "description": "Allows to login anonymously as configured user.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "AGPL-3.0",
   "main": "dist/server/index.js",
   "dependencies": {},
   "peerDependencies": {
-    "@nocobase/client": "1.x",
-    "@nocobase/server": "1.x",
-    "@nocobase/test": "1.x"
+    "@nocobase/client": "^1.3.19-beta",
+    "@nocobase/server": "^1.3.19-beta",
+    "@nocobase/test": "^1.3.19-beta"
   },
   "keywords": [
     "Authentication"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/typekcz/nocobase-plugins.git"
+  }
 }
