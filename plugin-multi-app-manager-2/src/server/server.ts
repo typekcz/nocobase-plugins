@@ -12,6 +12,7 @@ import Application, { AppSupervisor, Gateway, Plugin } from '@nocobase/server';
 import lodash from 'lodash';
 import path from 'path';
 import { ApplicationModel } from '.';
+import { SubAppModsPlugin } from './SubAppModsPlugin';
 
 export type AppDbCreator = (app: Application, options?: Transactionable & { context?: any }) => Promise<void>;
 export type AppOptionsFactory = (appName: string, mainApp: Application) => any;
@@ -125,6 +126,12 @@ const defaultAppOptionsFactory = (appName: string, mainApp: Application) => {
   };
 };
 
+function addPluginToSubApp(app) {
+  if (app.name !== 'main') {
+    app.plugin(SubAppModsPlugin, { name: 'sub-app-mods' });
+  }
+}
+
 export class PluginMultiAppManagerServer extends Plugin {
   appDbCreator: AppDbCreator = defaultDbCreator;
   appOptionsFactory: AppOptionsFactory = defaultAppOptionsFactory;
@@ -156,6 +163,14 @@ export class PluginMultiAppManagerServer extends Plugin {
   }
 
   beforeLoad() {
+    if (
+      AppSupervisor.getInstance()
+        .listeners('afterAppAdded')
+        .filter((f) => f.name == addPluginToSubApp.name).length == 0
+    ) {
+      AppSupervisor.getInstance().on('afterAppAdded', addPluginToSubApp);
+    }
+
     this.db.registerModels({
       ApplicationModel,
     });

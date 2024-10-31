@@ -1,14 +1,10 @@
 {
   "name": "@typekcz-nocobase-plugins/plugin-multi-app-manager-2",
   "displayName": "Multi-app manager 2",
-  "displayName.zh-CN": "多应用管理器",
   "description": "Dynamically create multiple apps without separate deployments.",
-  "description.zh-CN": "无需单独部署即可动态创建多个应用。",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "license": "AGPL-3.0",
   "main": "./dist/server/index.js",
-  "homepage": "https://docs.nocobase.com/handbook/multi-app-manager",
-  "homepage.zh-CN": "https://docs-cn.nocobase.com/handbook/multi-app-manager",
   "devDependencies": {
     "@formily/react": "2.x",
     "@formily/shared": "2.x",
@@ -28,8 +24,11 @@
     "@nocobase/test": "1.x",
     "@nocobase/utils": "1.x"
   },
-  "gitHead": "d0b4efe4be55f8c79a98a331d99d9f8cf99021a1",
   "keywords": [
     "system"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/typekcz/nocobase-plugins.git"
+  }
 }
