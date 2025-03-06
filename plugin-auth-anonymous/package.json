@@ -17,5 +17,10 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/typekcz/nocobase-plugins.git"
-  }
+  },
+  "files": [
+    "server.js",
+    "server.d.ts",
+    "dist/**"
+  ]
 }
