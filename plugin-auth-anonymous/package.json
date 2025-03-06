@@ -2,7 +2,7 @@
   "name": "@typekcz-nocobase-plugins/plugin-auth-anonymous",
   "displayName": "Auth: Anonymous login",
   "description": "Allows to login anonymously as configured user.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "AGPL-3.0",
   "main": "dist/server/index.js",
   "dependencies": {},
