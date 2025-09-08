@@ -2,7 +2,7 @@
   "name": "@typekcz-nocobase-plugins/plugin-set-default-role",
   "displayName": "Set default role",
   "description": "If user has no role, assign default role to them.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "AGPL-3.0",
   "main": "./dist/server/index.js",
   "peerDependencies": {
