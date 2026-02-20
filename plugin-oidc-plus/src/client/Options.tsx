@@ -171,6 +171,16 @@ const schema = {
                       '{{t("Performs logout on the issuer (uses end_session_endpoint in the issuer configuration)")}}',
                   },
                 },
+                autoLoginRedirect: {
+                  type: 'boolean',
+                  title: '{{t("Automatic redirect to issuer login")}}',
+                  'x-component': 'Checkbox',
+                  'x-decorator': 'FormItem',
+                  'x-decorator-props': {
+                    tooltip:
+                      '{{t("When user is logged out, redirect them to issuer login, skipping Nocobase login page. If you want to access the login page without being redirected, make sure your URL doesn\'t have the redirect parameter.")}}',
+                  },
+                },
                 http: {
                   type: 'boolean',
                   title: '{{t("HTTP")}}',

@@ -19,6 +19,7 @@ export const OIDCButton = ({ authenticator }: { authenticator: Authenticator }) 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const redirect = params.get('redirect');
+  const errorParam = params.get('error');
 
   const login = async () => {
     const response = await api.request({
@@ -38,12 +39,21 @@ export const OIDCButton = ({ authenticator }: { authenticator: Authenticator }) 
 
   useEffect(() => {
     const logoutUrl = Cookies.get(logoutCookieName);
-    if (logoutUrl) {
+    if (!errorParam && logoutUrl) {
       const logoutUrlObj = new URL(logoutUrl);
       logoutUrlObj.searchParams.set('post_logout_redirect_uri', window.location.href);
       Cookies.remove(logoutCookieName, { domain: window.location.hostname });
+      console.info("OIDC+: Redirect to logout from SSO.");
       window.location.href = logoutUrlObj.href;
+      return;
     }
+
+    if(!errorParam && authenticator.options?.autoLoginRedirect && redirect != null) {
+      console.info("OIDC+: Redirect to login in SSO.");
+      login();
+      return;
+    }
+
     const name = params.get('authenticator');
     const error = params.get('error');
     if (name !== authenticator.name) {

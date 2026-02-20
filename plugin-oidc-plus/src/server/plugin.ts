@@ -21,9 +21,14 @@ export class PluginOIDCServer extends Plugin {
 
     this.app.authManager.registerTypes(authType, {
       auth: OIDCAuth,
+      getPublicOptions(options) {
+        return {
+          autoLoginRedirect: options.oidc.autoLoginRedirect
+        };
+      },
     });
 
-    this.app.resource({
+    this.app.resourceManager.define({
       name: 'oidc',
       actions: {
         getAuthUrl,
