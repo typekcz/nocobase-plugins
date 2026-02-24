@@ -1,5 +1,4 @@
-import { LoginOutlined } from '@ant-design/icons';
-import { css, useAPIClient } from '@nocobase/client';
+import { css, Icon, useAPIClient } from '@nocobase/client';
 import { Button, Space, message } from 'antd';
 import React, { useEffect } from 'react';
 import { useOidcTranslation } from './locale';
@@ -65,6 +64,8 @@ export const OIDCButton = ({ authenticator }: { authenticator: Authenticator }) 
     }
   });
 
+  const btnStyle = authenticator.options?.buttonStyle;
+
   return (
     <Space
       direction="vertical"
@@ -72,7 +73,13 @@ export const OIDCButton = ({ authenticator }: { authenticator: Authenticator }) 
         display: flex;
       `}
     >
-      <Button shape="round" block icon={<LoginOutlined />} onClick={login}>
+      <Button block onClick={login}
+        icon={<Icon type={btnStyle?.icon} />}
+        type={btnStyle?.type}
+        shape={btnStyle?.shape ?? "round"}
+        color={btnStyle?.color}
+        variant={btnStyle?.variant}
+        style={btnStyle?.customStyle?.reduce((obj, s) => { obj[s.property] = s.value; return obj; }, {})}>
         {t(authenticator.title)}
       </Button>
     </Space>

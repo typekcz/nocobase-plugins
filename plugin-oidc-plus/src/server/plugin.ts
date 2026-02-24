@@ -23,7 +23,8 @@ export class PluginOIDCServer extends Plugin {
       auth: OIDCAuth,
       getPublicOptions(options) {
         return {
-          autoLoginRedirect: options.oidc.autoLoginRedirect
+          autoLoginRedirect: options.oidc.autoLoginRedirect,
+          buttonStyle: options.oidc.buttonStyle,
         };
       },
     });

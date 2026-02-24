@@ -1,10 +1,12 @@
 import { CopyOutlined } from '@ant-design/icons';
 import { ArrayItems, FormTab } from '@formily/antd-v5';
-import { observer } from '@formily/react';
-import { FormItem, Input, SchemaComponent, useApp } from '@nocobase/client';
-import { Card, Space, message } from 'antd';
+import { observer, useField } from '@formily/react';
+import type { ArrayField, Field } from '@formily/core';
+import { FormItem, Icon, Input, SchemaComponent, useApp } from '@nocobase/client';
+import { Button, Card, Space, message } from 'antd';
 import React, { useMemo } from 'react';
 import { lang, useOidcTranslation } from './locale';
+import { _ButtonColorTypes, _ButtonVariantTypes } from 'antd/es/button';
 
 const schema = {
   type: 'object',
@@ -84,6 +86,10 @@ const schema = {
                     { label: 'PS384', value: 'PS384' },
                     { label: 'PS512', value: 'PS512' },
                   ],
+                },
+                usage: {
+                  type: 'void',
+                  'x-component': 'Usage',
                 },
               },
             },
@@ -327,13 +333,104 @@ const schema = {
                 },
               },
             },
+            buttonStyle: {
+              type: 'object',
+              'x-component': 'FormTab.TabPane',
+              'x-component-props': {
+                tab: lang('Button Style'),
+              },
+              properties: {
+                type: {
+                  type: 'string',
+                  title: '{{t("Type")}}',
+                  'x-component': 'Select',
+                  'x-decorator': 'FormItem',
+                  enum: ["default", "primary", "dashed", "link", "text"].map(v => ({ label: v.charAt(0).toUpperCase()+v.slice(1), value: v})),
+                },
+                shape: {
+                  type: 'string',
+                  title: '{{t("Shape")}}',
+                  'x-component': 'Select',
+                  'x-decorator': 'FormItem',
+                  enum: ["default", "circle", "round"].map(v => ({ label: v.charAt(0).toUpperCase()+v.slice(1), value: v})),
+                },
+                variant: {
+                  type: 'string',
+                  title: '{{t("Variant")}}',
+                  'x-component': 'Select',
+                  'x-decorator': 'FormItem',
+                  enum: _ButtonVariantTypes.map(v => ({ label: v.charAt(0).toUpperCase()+v.slice(1), value: v})),
+                },
+                color: {
+                  type: 'string',
+                  title: '{{t("Color")}}',
+                  'x-component': 'Select',
+                  'x-decorator': 'FormItem',
+                  enum: _ButtonColorTypes.map(v => ({ label: v.charAt(0).toUpperCase()+v.slice(1), value: v})),
+                },
+                icon: {
+                  type: 'string',
+                  title: '{{t("Icon")}}',
+                  'x-component': 'IconPicker',
+                  'x-decorator': 'FormItem',
+                  enum: _ButtonColorTypes.map(v => ({ label: v.charAt(0).toUpperCase()+v.slice(1), value: v})),
+                },
+                customStyle: {
+                  title: '{{t("Custom Style")}}',
+                  type: 'array',
+                  'x-decorator': 'FormItem',
+                  'x-component': 'ArrayItems',
+                  items: {
+                    type: 'object',
+                    'x-decorator': 'ArrayItems.Item',
+                    properties: {
+                      space: {
+                        type: 'void',
+                        'x-component': 'Space',
+                        properties: {
+                          property: {
+                            type: 'string',
+                            'x-decorator': 'FormItem',
+                            'x-component': 'Input',
+                            'x-component-props': {
+                              placeholder: '{{t("property")}}',
+                            },
+                          },
+                          value: {
+                            type: 'string',
+                            'x-decorator': 'FormItem',
+                            'x-component': 'Input',
+                            'x-component-props': {
+                              placeholder: '{{t("value")}}',
+                            },
+                          },
+                          remove: {
+                            type: 'void',
+                            'x-decorator': 'FormItem',
+                            'x-component': 'ArrayItems.Remove',
+                          },
+                        },
+                      },
+                    },
+                  },
+                  description: lang("JavaScript style CSS property names on the left, values on the right."),
+                  properties: {
+                    add: {
+                      type: 'void',
+                      title: 'Add',
+                      'x-component': 'ArrayItems.Addition',
+                    },
+                  },
+                },
+                preview: {
+                  type: 'void',
+                  'x-component': 'ButtonStylePreview',
+                },
+              },
+            },
           },
         },
       },
-    },
-    usage: {
-      type: 'void',
-      'x-component': 'Usage',
     },
   },
 };
@@ -363,7 +460,52 @@ const Usage = observer(
   { displayName: 'Usage' },
 );
 
+const ButtonStylePreview = observer(
+  () => {
+    const field = useField();
+
+    // Query sibling fields to access their observable values
+    const typeField = field.query('.type').take() as Field;
+    const shapeField = field.query('.shape').take() as Field;
+    const variantField = field.query('.variant').take() as Field;
+    const colorField = field.query('.color').take() as Field;
+    const iconField = field.query('.icon').take() as Field;
+    const customStyleField = field.query('.customStyle').take() as ArrayField;
+
+    const buttonProps = useMemo(() => {
+      const props: any = {};
+
+      if(typeField?.value) props.type = typeField.value;
+      if(shapeField?.value) props.shape = shapeField.value;
+      if(variantField?.value) props.variant = variantField.value;
+      if(colorField?.value) props.color = colorField.value;
+      if(iconField?.value) props.icon = <Icon type={iconField.value} />;
+
+      if (Array.isArray(customStyleField?.value)) {
+        props.style = customStyleField.value.reduce((obj: React.CSSProperties, s: { property: string, value: string }) => {
+          obj[s.property] = s.value; return obj;
+        }, {});
+      }
+
+      return props;
+    }, [typeField?.value, shapeField?.value, variantField?.value, colorField?.value, iconField?.value, customStyleField?.value]);
+
+    return (
+      <Card title="Preview" type="inner">
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <div style={{ display: "flex", flexDirection: "column", width: "320px" }}>
+            <Button {...buttonProps}>
+              Preview Button
+            </Button>
+          </div>
+        </Space>
+      </Card>
+    );
+  },
+  { displayName: 'ButtonStylePreview' },
+);
+
 export const Options = () => {
   const { t } = useOidcTranslation();
-  return <SchemaComponent scope={{ t }} components={{ Usage, ArrayItems, Space, FormTab }} schema={schema} />;
+  return <SchemaComponent scope={{ t }} components={{ Usage, ButtonStylePreview, ArrayItems, Space, FormTab }} schema={schema} />;
 };
